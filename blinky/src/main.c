@@ -10,13 +10,13 @@
 
 #define SLEEP_TIME_MS 2000
 
-#define LED0_NODE DT_ALIAS(led0)
+#define LED5180_NODE DT_ALIAS(led5180)
 
 /*
  * A build error on this line means your board is unsupported.
  * See the sample documentation for information on how to fix this.
  */
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
+static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED5180_NODE, gpios);
 
 int main(void)
 {
@@ -39,7 +39,7 @@ int main(void)
 		}
 
 		led_state = !led_state;
-		printf("LED state: %s\n", led_state ? "ON" : "OFF");
+		printf("LED 2 state: %s\n", led_state ? "ON" : "OFF");
 		k_msleep(SLEEP_TIME_MS);
 	}
 	return 0;
