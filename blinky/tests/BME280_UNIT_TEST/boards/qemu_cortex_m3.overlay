@@ -1,0 +1,23 @@
+/*
+ * SPDX-FileCopyrightText: Copyright The Zephyr Project Contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#include <zephyr/dt-bindings/i2c/i2c.h>
+
+/ {
+	mock_i2c: i2c@400 {
+		compatible = "zephyr,i2c-emul-controller";
+		status = "okay";
+		clock-frequency = <I2C_BITRATE_STANDARD>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg = <0x400 4>;
+
+		bme280_5180: bme280@77 {
+			compatible = "i2c-device";
+			status = "okay";
+			reg = <0x77>;
+		};
+	};
+};
