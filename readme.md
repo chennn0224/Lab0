@@ -6,10 +6,6 @@
 
 **GitHub Repository URL:** https://github.com/chennn0224/Lab0
 
-## 1. Sample Header
-
-## 2. Sample Second Header
-
 ## 3. Building with West
 
 ![West build and flash terminal output](evidence/section-3-west-build-flash.png)
