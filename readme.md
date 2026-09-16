@@ -30,3 +30,16 @@ The sum tests cover positive values, negative values, and zero. All three test c
 QEMU, and the test application also builds successfully for the nRF7002 DK.
 
 ![Twister Ztest results](evidence/section-7-ztest.png)
+
+## 8. BME280 Temperature Sensor
+
+### Temperature logging output
+
+![BME280 temperature logging output](evidence/section-8-temperature.png)
+
+### BME280 Ztest output
+
+The four tests check the data sheet example, devicetree setup, valid temperature range, and
+out-of-range rejection.
+
+![BME280 Ztest results](evidence/section-8-ztest.png)
