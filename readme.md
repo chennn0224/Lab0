@@ -2,9 +2,9 @@
 
 | Team Member Name | Email Address       |
 |------------------|---------------------|
-| [Name 1]         | [Email 1]           |
+| Zhiyuan Chen     | chennn@engineering.upenn.edu |
 
-**GitHub Repository URL:** 
+**GitHub Repository URL:** https://github.com/chennn0224/Lab0
 
 ## 1. Sample Header
 
