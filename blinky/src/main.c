@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
+#include <zephyr/logging/log.h>
+
+#include "bme280_direct.h"
 
 #if defined(CONFIG_SUM_PRINT)
 #include "sum_printk.h"
@@ -14,9 +17,12 @@
 #include "sum_log.h"
 #endif
 
-#define POLL_TIME_MS 20
+#define POLL_TIME_MS              20
+#define TEMPERATURE_PRINT_TIME_MS 2000
 
-#define LED5180_NODE DT_ALIAS(led5180)
+LOG_MODULE_REGISTER(blinky, LOG_LEVEL_INF);
+
+#define LED5180_NODE    DT_ALIAS(led5180)
 #define BUTTON5180_NODE DT_ALIAS(button5180)
 
 /*
@@ -43,11 +49,14 @@ int main(void)
 {
 	int ret;
 	int button_state;
+	int32_t temperature_centi_c;
+	int32_t temperature_fraction;
+	int64_t next_temperature_time = 0;
 	bool button_was_pressed = false;
 	bool led_state = false;
+	bool bme280_ready;
 
-	if ((gpio_is_ready_dt(&led) == false) ||
-	    (gpio_is_ready_dt(&button) == false)) {
+	if ((gpio_is_ready_dt(&led) == false) || (gpio_is_ready_dt(&button) == false)) {
 		return 0;
 	}
 
@@ -63,6 +72,7 @@ int main(void)
 
 	run_sum_demo();
 	printf("Press Button 1 to toggle LED 2\n");
+	bme280_ready = bme280_direct_init() == 0;
 
 	while (1) {
 		button_state = gpio_pin_get_dt(&button);
@@ -81,6 +91,29 @@ int main(void)
 		}
 
 		button_was_pressed = button_state > 0;
+
+		if (bme280_ready && (k_uptime_get() >= next_temperature_time)) {
+			ret = bme280_direct_read_temperature(&temperature_centi_c);
+			if (ret < 0) {
+				LOG_ERR("Could not read temperature: %d", ret);
+			} else {
+				temperature_fraction = temperature_centi_c % 100;
+				if (temperature_fraction < 0) {
+					temperature_fraction = -temperature_fraction;
+				}
+
+				if (temperature_centi_c < 0) {
+					LOG_INF("Temperature: -%d.%02d C",
+						-temperature_centi_c / 100, temperature_fraction);
+				} else {
+					LOG_INF("Temperature: %d.%02d C", temperature_centi_c / 100,
+						temperature_fraction);
+				}
+			}
+
+			next_temperature_time = k_uptime_get() + TEMPERATURE_PRINT_TIME_MS;
+		}
+
 		k_msleep(POLL_TIME_MS);
 	}
 	return 0;
