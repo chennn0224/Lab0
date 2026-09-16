@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+
+source "Kconfig.zephyr"
+
+choice SUM_IMPLEMENTATION
+	prompt "Sum output implementation"
+	default SUM_PRINT
+
+config SUM_PRINT
+	bool "Use printk for sum output"
+
+config SUM_LOG
+	bool "Use Logger for sum output"
+
+endchoice

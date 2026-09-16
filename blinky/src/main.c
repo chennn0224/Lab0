@@ -8,6 +8,12 @@
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
 
+#if defined(CONFIG_SUM_PRINT)
+#include "sum_printk.h"
+#elif defined(CONFIG_SUM_LOG)
+#include "sum_log.h"
+#endif
+
 #define POLL_TIME_MS 20
 
 #define LED5180_NODE DT_ALIAS(led5180)
@@ -19,6 +25,19 @@
  */
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED5180_NODE, gpios);
 static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET(BUTTON5180_NODE, gpios);
+
+static void run_sum_demo(void)
+{
+	int result;
+
+#if defined(CONFIG_SUM_PRINT)
+	result = sum_printk(7, 5);
+#elif defined(CONFIG_SUM_LOG)
+	result = sum_log(7, 5);
+#endif
+
+	(void)result;
+}
 
 int main(void)
 {
@@ -42,6 +61,7 @@ int main(void)
 		return 0;
 	}
 
+	run_sum_demo();
 	printf("Press Button 1 to toggle LED 2\n");
 
 	while (1) {
